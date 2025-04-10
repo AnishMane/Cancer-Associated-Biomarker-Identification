@@ -1,4 +1,3 @@
-# streamlit_app.py
 import streamlit as st
 import requests
 import pandas as pd
@@ -78,60 +77,62 @@ categorical_mappings = {
     "Somatic": ["yes", "no", "unknown"],
     "Hallmark": ["yes", "no", "unknown"],
     "Other Germline Mut": ["yes", "no", "unknown"],
-    "Chr Band": ["1p36.2", "2q33-q34", "8q24.1", "11q", "17p13.1", "Other"],  # Example values
-    "Chr Location Cytoband": ["1p", "2q", "3p", "4q", "5p", "Other"],  # Example values
-    "Chromosome": ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", 
-                  "16", "17", "18", "19", "20", "21", "22", "X", "Y"],
-    "Molecular Genetics": ["Dominant", "Recessive", "X-linked", "Unknown"],  # Example values
-    "Mutation Type": ["Deletion", "Insertion", "Substitution", "Duplication", "Translocation", "Other"],  # Example values
-    "Tissue Type": ["Epithelial", "Mesenchymal", "Hematopoietic", "Other"],  # Example values
+    "Molecular Genetics": ["Dominant", "Recessive", "X-linked", "Unknown"],
+    "Mutation Type": ["D", "F", "Mis", "N", "A", "O", "S"],  # Removed duplicate "F"
+    "mutation type": ["D", "F", "Mis", "N", "A", "O", "S"],  # Adding lowercase version
+    "MUTATION TYPE": ["D", "F", "Mis", "N", "A", "O", "S"],  # Adding uppercase version
+    "mutation_type": ["D", "F", "Mis", "N", "A", "O", "S"],  # Adding with underscore
+    "Tissue Type": ["Epithelial", "Lymphatic", "Mesenchymal", "Hematopoietic", "Other"],
 }
 
 # Define numeric variables with reasonable ranges
 numeric_ranges = {
-    "Tier": (0, 10, 0),  # (min, max, default)
-    "CDS length": (0, 10000, 1000),  # Example range
-    "Strand": (-1, 1, 1),  # Example range
-    "MIM Number": (100000, 999999, 100000),  # Example range
+    "Tier": (1, 2, 1),  # (min, max, default)
+    "CDS length": (0, 10000, 1000),
+    "Strand": (-1, 1, 1),
+    "MIM Number": (100000, 999999, 100000),
 }
 
 # Create input form
 with st.form("prediction_form"):
     st.markdown("### Enter Gene Information")
-    
+   
     # Create a dictionary to store feature inputs
     input_data = {}
     
+    # Display actual feature names for debugging
+    with st.expander("Debug - Available Features"):
+        st.write(features)
+   
     # Create columns for better layout
     num_columns = 2
     cols = st.columns(num_columns)
-    
-    # Helper function to determine if a feature is categorical
-    def is_categorical(feature_name):
-        return feature_name in categorical_mappings or any(keyword in feature_name.lower() 
-                                                       for keyword in ["type", "status", "role", "category"])
-    
-    # Helper function to determine if a feature is numerical
-    def is_numerical(feature_name):
-        return feature_name in numeric_ranges or any(keyword in feature_name.lower() 
-                                                for keyword in ["count", "number", "score", "id", "length", "position"])
-    
-    # Create input fields based on feature types
+   
+    # Process each feature
     for i, feature in enumerate(features):
         col_idx = i % num_columns
         with cols[col_idx]:
-            if is_categorical(feature):
-                # Use predefined options if available, otherwise default to yes/no
-                options = categorical_mappings.get(feature, ["yes", "no", "unknown"])
+            # Special handling for mutation type - check with various formats
+            if feature.lower() == "mutation type" or "mutation" in feature.lower() and "type" in feature.lower():
                 input_data[feature] = st.selectbox(
-                    f"{feature}", 
-                    options=options,
-                    index=1 if "no" in options else 0,
+                    f"{feature}",
+                    options=["D", "F", "Mis", "N", "A", "O", "S"],
+                    index=0,
                     key=f"feature_{feature}"
                 )
-            elif is_numerical(feature):
-                # Use predefined ranges if available, otherwise use default range
-                min_val, max_val, default_val = numeric_ranges.get(feature, (0, 100, 0))
+            # Direct lookup in categorical_mappings 
+            elif feature in categorical_mappings:
+                options = categorical_mappings[feature]
+                default_index = 1 if "no" in options else 0
+                input_data[feature] = st.selectbox(
+                    f"{feature}",
+                    options=options,
+                    index=default_index,
+                    key=f"feature_{feature}"
+                )
+            # Check if it's a numerical feature
+            elif feature in numeric_ranges:
+                min_val, max_val, default_val = numeric_ranges[feature]
                 input_data[feature] = st.number_input(
                     f"{feature}",
                     min_value=min_val,
@@ -139,37 +140,69 @@ with st.form("prediction_form"):
                     value=default_val,
                     key=f"feature_{feature}"
                 )
+            # Generic detection for other categorical features
+            elif any(keyword in feature.lower() for keyword in ["type", "status", "role", "category"]):
+                input_data[feature] = st.selectbox(
+                    f"{feature}",
+                    options=["yes", "no", "unknown"],
+                    index=1,
+                    key=f"feature_{feature}"
+                )
+            # Generic detection for other numerical features
+            elif any(keyword in feature.lower() for keyword in ["count", "number", "score", "id", "length", "position"]):
+                input_data[feature] = st.number_input(
+                    f"{feature}",
+                    min_value=0,
+                    max_value=1000000,
+                    value=0,
+                    key=f"feature_{feature}"
+                )
+            # Default to text input for everything else
             else:
-                # For other features, use text input with default value
                 input_data[feature] = st.text_input(
                     f"{feature}",
                     value="",
                     key=f"feature_{feature}"
                 )
-    
-    # Special handling for features that need specific options
+
+    # Special handling for Tier if needed
     if "Tier" in features and "Tier" not in input_data:
         input_data["Tier"] = st.slider(
-            "Tier", 
-            min_value=0, 
-            max_value=10, 
-            value=0, 
+            "Tier",
+            min_value=0,
+            max_value=10,
+            value=0,
             step=1,
             key="feature_Tier"
         )
-    
-    # Add preset configurations to quickly fill form with common patterns
+   
+    # Add preset configurations
     st.markdown("### Preset Configurations")
     preset = st.selectbox(
         "Select a preset configuration",
         options=["Custom (Use inputs above)", "Typical TSG", "Typical Oncogene", "Fusion Gene", "Tumor Mutation Load"],
         index=0
     )
-    
+   
     # Apply preset values if selected
     if preset == "Typical TSG":
         input_data.update({
-            "Germline": "yes",
+            "Name":"",
+            "Genome Location":"",
+            "Tier":1,
+            "Hallmark":"no",
+            "Chr Band":"",
+            "Somatic":"no",
+            "Germline":"no",
+            "Tissue Type":"Mesenchymal",
+            "Molecular Genetics":"Dominant",
+            "Mutation Types":"F",
+            "Other Germline Mut":"yes",
+            "Synonyms":"",
+        })
+    elif preset == "Fusion Gene":
+        input_data.update({
+            "Germline": "no",
             "Somatic": "yes",
             "Hallmark": "yes",
             "Tier": 1,
@@ -177,29 +210,27 @@ with st.form("prediction_form"):
         })
     elif preset == "Typical Oncogene":
         input_data.update({
-            "Germline": "no",
-            "Somatic": "yes",
-            "Hallmark": "yes",
-            "Tier": 1,
-            "Other Germline Mut": "no"
-        })
-    elif preset == "Fusion Gene":
-        input_data.update({
-            "Germline": "no",
-            "Somatic": "yes",
-            "Hallmark": "no",
-            "Tier": 2,
-            "Other Germline Mut": "no"
-        })
+            "Name":"",
+            "Genome Location":"",
+            "Tier":1,
+            "Hallmark":"no",
+            "Chr Band":"",
+            "Somatic":"no",
+            "Germline":"no",
+            "Tissue Type":"Mesenchymal",
+            "Molecular Genetics":"Recessive",
+            "Mutation Types":"A",
+            "Other Germline Mut":"yes",
+            "Synonyms":""})
     elif preset == "Tumor Mutation Load":
         input_data.update({
             "Germline": "no",
             "Somatic": "yes",
             "Hallmark": "no",
-            "Tier": 3,
+            "Tier": 1,
             "Other Germline Mut": "yes"
         })
-    
+   
     # Submit button
     submit_button = st.form_submit_button("Predict Role in Cancer")
 
@@ -208,12 +239,12 @@ if submit_button:
     st.markdown("### Input Data")
     input_df = pd.DataFrame([input_data])
     st.dataframe(input_df)
-    
+   
     # Debug information
     with st.expander("Debug Information"):
         st.markdown("#### Input JSON")
         st.json(input_data)
-    
+   
     try:
         # Make prediction request
         response = requests.post(
@@ -221,13 +252,13 @@ if submit_button:
             json=input_data,
             headers={"Content-Type": "application/json"}
         )
-        
+       
         if response.status_code == 200:
             result = response.json()
-            
+           
             # Display prediction result
             st.markdown("## Prediction Results")
-            
+           
             # Main prediction with styled box
             prediction = result['prediction']
             st.markdown(f"""
@@ -236,15 +267,15 @@ if submit_button:
                 <h2 style="color:#1f77b4;">{prediction}</h2>
             </div>
             """, unsafe_allow_html=True)
-            
+           
             # Display probabilities
             if 'probabilities' in result:
                 st.markdown("### Prediction Probabilities")
-                
+               
                 # Sort probabilities by value for better visualization
                 probs = result['probabilities']
                 sorted_probs = {k: v for k, v in sorted(probs.items(), key=lambda item: item[1], reverse=True)}
-                
+               
                 # Create bar chart
                 fig = go.Figure(data=[
                     go.Bar(
@@ -255,7 +286,7 @@ if submit_button:
                         textposition='auto'
                     )
                 ])
-                
+               
                 fig.update_layout(
                     title="Probability Distribution",
                     xaxis_title="Role in Cancer",
@@ -263,9 +294,9 @@ if submit_button:
                     yaxis=dict(tickformat=".0%"),
                     height=500
                 )
-                
+               
                 st.plotly_chart(fig, use_container_width=True)
-                
+               
                 # Show raw response in expander
                 with st.expander("View Raw API Response"):
                     st.json(result)
@@ -274,7 +305,7 @@ if submit_button:
         else:
             st.error(f"Error from API: {response.status_code}")
             st.code(response.text)
-            
+           
     except Exception as e:
         st.error(f"Error making prediction: {str(e)}")
 
@@ -282,22 +313,18 @@ if submit_button:
 st.markdown("---")
 st.markdown("""
 ### About This Prediction Model
-
 This model was trained using XGBoost with the following parameters:
 - colsample_bytree: 0.8
 - learning_rate: 0.01
 - max_depth: 7
 - n_estimators: 600
 - subsample: 0.8
-
 The model was trained on cancer gene data to predict the role of genes in cancer development.
-
 ### Model Output Classes:
 - TSG (Tumor Suppressor Gene)
 - Oncogene
 - Fusion
 - Other
-
 If the model is consistently predicting only "TSG", this could indicate:
 1. Class imbalance in the training data
 2. Feature encoding issues
