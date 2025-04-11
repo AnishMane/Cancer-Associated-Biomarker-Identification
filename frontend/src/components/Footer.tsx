@@ -11,7 +11,7 @@ const Footer: React.FC = () => {
             © {new Date().getFullYear()} OncoTrace.ai. All rights reserved.
           </p>
           <a
-            href="https://github.com"
+            href="https://github.com/AnishMane/Cancer-Associated-Biomarker-Identification"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center space-x-1 text-sm text-gray-600 transition-colors hover:text-biology dark:text-gray-400 dark:hover:text-biology-light"

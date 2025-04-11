@@ -136,7 +136,7 @@ const Contact = () => {
             <h4 className="mb-2 font-medium">Other ways to reach us:</h4>
             <div className="flex items-center gap-2 text-sm text-gray-600">
               <Mail className="h-4 w-4" />
-              <span>support@genegleaner.com</span>
+              <span>anishmane70@gmail.com</span>
             </div>
           </CardFooter>
         </Card>

@@ -1,4 +1,3 @@
-
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Book, Database, FlaskConical, Microscope, Dna } from "lucide-react";
 
@@ -7,24 +6,24 @@ const About = () => {
     <div className="container mx-auto py-12 px-4">
       <div className="mx-auto max-w-3xl">
         <div className="mb-8 text-center">
-          <h1 className="mb-2 text-4xl font-bold text-gray-800">About Gene Gleaner</h1>
-          <p className="text-lg text-gray-600">Extracting biology knowledge from the web</p>
+          <h1 className="mb-2 text-4xl font-bold text-gray-800">Cancer Biomarker Identification Platform</h1>
+          <p className="text-lg text-gray-600">Advancing personalized medicine through biomarker discovery</p>
         </div>
 
         <Card className="mb-8">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Microscope className="h-6 w-6 text-biology" />
-              What We Do
+              Our Mission
             </CardTitle>
-            <CardDescription>Understanding our service</CardDescription>
+            <CardDescription>Transforming cancer research through technology</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <p>
-              Gene Gleaner is a specialized tool designed to help researchers, students, and biology enthusiasts extract relevant information from scientific articles and resources across the web.
+              Our platform integrates cutting-edge machine learning with modern web technologies to create a comprehensive system for cancer biomarker identification, enabling early detection and improved treatment outcomes.
             </p>
             <p>
-              Our application uses natural language processing and pattern recognition to identify and extract biology-related content, saving you time and effort when researching complex topics.
+              By bridging computational biology with web technology, we empower researchers and clinicians to make significant strides in oncology, facilitating new discoveries in cancer research and precision medicine.
             </p>
           </CardContent>
         </Card>
@@ -34,12 +33,12 @@ const About = () => {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Dna className="h-6 w-6 text-biology" />
-                AI-Powered Analysis
+                Advanced ML Models
               </CardTitle>
             </CardHeader>
             <CardContent>
               <p>
-                Our system uses advanced AI algorithms to identify and extract biology-related paragraphs, tables, and metadata from scientific articles. The AI has been trained on thousands of biology texts to recognize relevant information.
+                Our Python-based Flask backend hosts state-of-the-art machine learning models that analyze complex biological datasets to accurately predict cancer biomarkers. We leverage libraries like Scikit-learn, TensorFlow, and Pandas for efficient data preprocessing and predictive analytics.
               </p>
             </CardContent>
           </Card>
@@ -48,12 +47,12 @@ const About = () => {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Database className="h-6 w-6 text-biology" />
-                Structured Data Extraction
+                Interactive Platform
               </CardTitle>
             </CardHeader>
             <CardContent>
               <p>
-                Gene Gleaner doesn't just copy text—it structures the information into a format that's easy to read, analyze, and incorporate into your own work. Tables, headlines, and key paragraphs are all neatly organized.
+                Our NextJS frontend delivers an intuitive user experience tailored for researchers and clinicians. Users can input various types of biological data, interact dynamically with our ML models, and visualize results through responsive interfaces without needing extensive computational expertise.
               </p>
             </CardContent>
           </Card>
@@ -62,15 +61,15 @@ const About = () => {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <FlaskConical className="h-6 w-6 text-biology" />
-                For Scientists, By Scientists
+                Modular & Scalable Design
               </CardTitle>
             </CardHeader>
             <CardContent>
               <p>
-                Developed by a team with backgrounds in both biology and computer science, Gene Gleaner is built to address the real needs of the scientific community. We understand the challenges of working with scientific literature and have designed our tool to make your research process more efficient.
+                Our system is meticulously designed to be modular, scalable, and highly adaptable, making it capable of handling diverse datasets and addressing a wide array of use cases in cancer research.
               </p>
               <p className="mt-4">
-                Whether you're studying genetics, cellular biology, ecology, or any other biology discipline, our tool can help you extract the information that matters most.
+                By predicting whether specific oncogenes will contribute to cancer onset, our platform empowers researchers to make significant advances in early detection strategies, personalized treatment plans, and groundbreaking oncology research.
               </p>
             </CardContent>
           </Card>
