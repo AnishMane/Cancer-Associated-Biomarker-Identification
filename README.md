@@ -1,4 +1,4 @@
-# 🧬 Cancer Biomarker Identification
+# 🧬 OncoTrace.ai
 
 An AI-powered web application designed to identify potential cancer-associated biomarkers. This project leverages a **NextJS** frontend, a **Python (Flask + Streamlit)** backend, and a trained **machine learning model** to analyze input gene data and return relevant biomarker predictions.
 
