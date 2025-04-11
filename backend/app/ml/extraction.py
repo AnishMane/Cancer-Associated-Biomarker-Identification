@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 import json
 import logging
 import time
+import sys
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -121,17 +122,25 @@ def extract_from_url(url, output_file='extracted_content.json', retries=3):
         result = extract_text_content(url, biology_keywords)
         if result:
             # Save result to the output JSON file
-            with open(output_file, 'w') as output_json:
-                json.dump(result, output_json, indent=4)
+            with open(output_file, 'w', encoding='utf-8') as output_json:
+                json.dump(result, output_json, indent=4, ensure_ascii=False)
             logging.info(f"Content from {url} extracted and saved to '{output_file}'.")
-            break
+            return result  # Return the result data
         elif attempt < retries - 1:
             logging.info(f"Retrying {url} (Attempt {attempt + 2}/{retries})")
             time.sleep(2)  # Wait for 2 seconds before retrying
         else:
             logging.error(f"Failed to extract content from {url} after {retries} attempts.")
+            return {"error": f"Failed to extract content from {url} after {retries} attempts."}
 
 if __name__ == "__main__":
-    url ="https://www.mdpi.com/1422-0067/24/9/7781"
-    output_file = input("Enter the output JSON filename (default: 'extracted_content.json'): ") or 'extracted_content.json'
-    extract_from_url(url, output_file)
+    # Check if URL is provided as command line argument
+    if len(sys.argv) > 1:
+        logging.Logger.info("Entered the backend")
+        url = sys.argv[1]
+        output_file = sys.argv[2] if len(sys.argv) > 2 else 'extracted_content.json'
+        extract_from_url(url, output_file)
+    else:
+        url = "https://www.cancergenomeinterpreter.org/biomarkers"
+        output_file = input("Enter the output JSON filename (default: 'extracted_content.json'): ") or 'extracted_content.json'
+        extract_from_url(url, output_file)
