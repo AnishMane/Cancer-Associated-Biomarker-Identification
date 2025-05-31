@@ -1,92 +1,92 @@
-# Cancer Biomarker Identification Project
+# 🧬 OncoTrace.ai
 
-This project aims to identify cancer biomarkers using a Python backend (Flask API) and a React frontend, incorporating machine learning capabilities for predictions.
+An AI-powered web application designed to identify potential cancer-associated biomarkers. This project leverages a **NextJS** frontend, a **Python (Flask + Streamlit)** backend, and a trained **machine learning model** to analyze input gene data and return relevant biomarker predictions.
 
-## Table of Contents
-- [Project Description](#project-description)
-- [Prerequisites](#prerequisites)
-- [Setup Instructions](#setup-instructions)
-  - [1. Clone the Repository](#1-clone-the-repository)
-  - [2. Setting Up the Backend (Python and Flask)](#2-setting-up-the-backend-python-and-flask)
-  - [3. Setting Up the Frontend (React)](#3-setting-up-the-frontend-react)
+---
 
-## Project Description
+## 📚 Table of Contents
 
-This project provides an interface for identifying potential cancer biomarkers. It uses a Python backend powered by Flask, where the machine learning models are hosted, and a React frontend that allows users to interact with the model and view results.
+- [🧾 Project Description](#-project-description)
+- [⚙️ Tech Stack](#-tech-stack)
+- [🚀 Getting Started](#-getting-started)
+  - [1️⃣ Clone the Repository](#1️⃣-clone-the-repository)
+  - [2️⃣ Set Up the Backend](#2️⃣-set-up-the-backend)
+  - [3️⃣ Run the Frontend](#3️⃣-run-the-frontend)
+  - [4️⃣ Start All Services](#4️⃣-start-all-services)
+- [📦 Prerequisites](#-prerequisites)
 
-## Prerequisites
+---
 
-- **Node.js and npm** (for frontend)
-- **Python 3 and pip** (for backend)
-- `virtualenv` (recommended for managing Python dependencies)
+## 🧾 Project Description
 
-## Setup Instructions
+This application offers an intuitive interface for identifying cancer-associated biomarkers. It combines biomedical NLP techniques with deep learning models to analyze gene data and surface insights using a web interface.
 
-### 1. Clone the Repository
+---
 
-Clone the repository to your local machine and navigate into the project directory:
+## ⚙️ Tech Stack
 
-```bash
-    git clone https://github.com/AnishMane/Cancer-Associated-Biomarker-Identification.git
-    cd Cancer-Associated-Biomarker-Identification
-```
+- **Frontend**: React, Tailwind CSS
+- **Backend**: Flask, Streamlit, Python
+- **ML Models**: BioBERT, OncoKB integration
+- **Other Tools**: pandas, scikit-learn, torch
 
-### 2. Setting Up the Backend (Python and Flask)
+---
 
-```bash
-    cd backend
-    python -m venv venv   # (or `python3 -m venv venv` for Mac)
-    venv/Scripts/activate  # (or `source venv\bin\activate` for Mac)
-    pip install -r requirements.txt
-```
+## 🚀 Getting Started
 
-### 3. Setting Up the Frontend (React)
+### 1️⃣ Clone the Repository
 
 ```bash
-    cd frontend
-    npm install
-    npm start
+git clone https://github.com/AnishMane/Cancer-Associated-Biomarker-Identification.git
+cd Cancer-Associated-Biomarker-Identification
 ```
 
-## STAR Approach
+---
 
-**S – Situation:**
+### 2️⃣ Set Up the Backend
 
-There is a growing need for early and accurate identification of cancer biomarkers to assist in diagnosis and treatment planning. Existing tools lacked precision and scalability for complex datasets, particularly in handling diverse data types from research articles, mutation databases, and raw genetic data.
+```bash
+cd backend
+python -m venv venv         # Use `python3` if needed
+venv/Scripts/activate       # or `source venv/bin/activate` on macOS/Linux
+pip install -r requirements.txt
+```
 
-**T – Task:**
+---
 
-I aimed to build a modern, full-stack application for cancer biomarker identification, combining a robust Python backend with a sophisticated React frontend. The system needed to provide an intuitive user interface for data input, real-time processing, and visualization of results, while maintaining high performance and scalability.
+### 3️⃣ Run the Frontend
 
-**A – Action:**
+```bash
+cd frontend
+npm install
+npm run dev
+```
 
-- **Frontend Development:**
-  - Built a modern React application using Vite and TypeScript for enhanced development experience
-  - Implemented a responsive UI using TailwindCSS and shadcn/ui components
-  - Created interactive data visualizations using Recharts
-  - Integrated React Query for efficient data fetching and state management
-  - Implemented form handling with React Hook Form and Zod validation
-  - Added toast notifications using Sonner for better user feedback
+---
 
-- **Backend Implementation:**
-  - Developed a Flask-based REST API for handling biomarker analysis
-  - Implemented data processing pipelines for biomarker identification
-  - Created secure endpoints for data submission and retrieval
-  - Integrated machine learning models for biomarker prediction
-  - Set up proper error handling and logging mechanisms
+### 4️⃣ Start All Services
 
-- **System Architecture:**
-  - Implemented a clean separation between frontend and backend services
-  - Used TypeScript for type safety and better code maintainability
-  - Set up proper development tooling (ESLint, Prettier) for code quality
-  - Implemented proper routing using React Router
-  - Created reusable components for consistent UI/UX
+Ensure you are in the `backend` folder and your virtual environment is activated:
 
-**R – Result:**
+```bash
+# In one terminal (inside backend/)
+python streamlit_app.py
 
-- Successfully delivered a modern, full-stack application for cancer biomarker identification
-- Created an intuitive user interface with real-time data visualization capabilities
-- Implemented robust error handling and user feedback mechanisms
-- Established a scalable architecture that can be easily extended
-- Built a maintainable codebase with proper TypeScript integration and modern development practices
-- Set up a development environment that promotes code quality and consistency
+# In a second terminal (inside backend/)
+python inference.py
+
+# In a third terminal (inside backend/)
+python app.py
+```
+
+Your frontend should now be running on `http://localhost:5173` and backend services (APIs and Streamlit dashboard) should be active.
+
+---
+
+## 📦 Prerequisites
+
+- **Node.js & npm** – [Download here](https://nodejs.org/)
+- **Python 3.x & pip**
+- **virtualenv** (optional but recommended)
+  
+
