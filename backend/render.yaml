@@ -12,4 +12,13 @@ services:
       - key: JWT_SECRET
         sync: false
       - key: CORS_ORIGINS
-        value: https://your-frontend-domain.vercel.app 
+        value: https://your-frontend-domain.vercel.app
+
+  - type: web
+    name: epics-streamlit
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: streamlit run app/ml/streamlit_app.py --server.port $PORT --server.address 0.0.0.0
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0 
