@@ -13,5 +13,14 @@
   "env": {
     "VITE_API_URL": "https://epics-backend.onrender.com",
     "VITE_STREAMLIT_URL": "https://epics-streamlit.onrender.com"
-  }
+  },
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist"
+      }
+    }
+  ]
 } 
